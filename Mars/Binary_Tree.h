@@ -44,19 +44,38 @@ public:
 	Binary_Tree(std::initializer_list<T> init);
 	//деструктор
 	/*~Binary_Tree()
-	{}*/
-	//методы
+	{
+		Node* parent_node = root;
+		for (Node* deleting_node = root; ; ) 
+		{
+			
+			
+			if (deleting_node->left == nullptr && deleting_node->right == nullptr)
+			{
+				Erase(deleting_node);
+			}
+			
+		}
+		
+	}*/
+	//МЕТОДЫ
 	void Insert(const T& value);
 	bool Find(const T& value);
 	size_t Erase(const T& key_value);
-	void make_space(int times)
+	void Swap_Child(Node* old_child, Node* parent_node , Node* new_child)
 	{
-		for (int i = 0; i < times; i++)
-		{
-			std::cout << " ";
-		}
+		if (parent_node == nullptr)
+			Set_Root(new_child);
+		else if (parent_node->left == old_child)
+			parent_node->left = new_child;
+		else
+			parent_node->right = new_child;
 	}
 	void Print();
+	void Set_Root(Node* new_root)
+	{
+		root =new_root;
+	}
 private:
 Node* root = nullptr;
 int tree_size = 0;
@@ -70,7 +89,6 @@ Binary_Tree<T>::Binary_Tree(std::initializer_list<T> init)
 		Insert(elem);
 	}
 }
-
 template <class T>
 void Binary_Tree<T>::Insert(const T& value)
 {
@@ -143,11 +161,7 @@ size_t Binary_Tree<T>::Erase (const T& key_value)
 	{
 		if( current_node->left == nullptr && current_node->right == nullptr)
 		{
-			if (parent_node->left == current_node)
-				parent_node->left = nullptr;
-			else
-				parent_node->right = nullptr;
-			std::cout << "Element " << current_node->data <<" is being deleted..." << std::endl;
+			Swap_Child(current_node, parent_node, nullptr);
 			delete current_node;
 		}
 		else if (current_node->left != nullptr && current_node->right != nullptr) //!!!!!!!!!!!!!!!!!!!! удаление если есть оба потомка !!!!!!!!!!!!!!!!!!!
@@ -156,27 +170,20 @@ size_t Binary_Tree<T>::Erase (const T& key_value)
 			auto highers_parent = current_node;
 			if (higher_to_swap->right !=nullptr)
 			{
-				for	(Node* moving_right = higher_to_swap; moving_right!=nullptr; )
+				for	(Node* moving_right = higher_to_swap; moving_right->right!=nullptr; )
 				{
 					moving_right = moving_right->right;
 					highers_parent = higher_to_swap;
 					higher_to_swap = moving_right;
 				}
-				highers_parent->right = nullptr;
+				highers_parent->right = higher_to_swap->left;
 				higher_to_swap->left = highers_parent;
 			}
-			if (parent_node->left == current_node)
-				parent_node->left = higher_to_swap;
-			else
-				parent_node->right = higher_to_swap;
-			
+			Swap_Child(current_node, parent_node, higher_to_swap);
 			higher_to_swap->right = current_node->right;
-
-			current_node->left = nullptr;
-			current_node->right = nullptr;
 			delete current_node;
 		}
-		else 
+		else
 		{
 			Node* swap_node;
 			if (current_node->left != nullptr)
@@ -184,11 +191,7 @@ size_t Binary_Tree<T>::Erase (const T& key_value)
 			else
 				swap_node = current_node->right;
 
-			if (parent_node->left == current_node)
-				parent_node->left = swap_node;
-			else
-				parent_node->right = swap_node;
-
+			Swap_Child(current_node,parent_node,swap_node);
 			delete current_node;
 		}
 		tree_size--;
@@ -203,7 +206,7 @@ size_t Binary_Tree<T>::Erase (const T& key_value)
 template<class T>
 void Binary_Tree<T>::Print()
 {
-	for (std::vector<Node*> A({ root }); If_not_null(A); ) // неправильное условие выхода из цикла
+	for (std::vector<Node*> A({ root }); If_not_null(A); )
 	{
 		for (Node* B : A)
 		{

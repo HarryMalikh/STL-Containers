@@ -64,30 +64,20 @@ int main()
 	myTree.Insert(17);
 	myTree.Insert(16);
 	myTree.Insert(23);
-	
+	myTree.Insert(19);
+	myTree.Insert(18); // при добавлении элемента и удалении 20 удаляется и 18. исправить (178 строчка цикл, зануление)  - upd. исправлено
+
 	myTree.Print();
+	myTree.Erase(15);
+	myTree.Erase(10);
+	myTree.Erase(9);
+	myTree.Erase(8);
+	std::cout << "TEEEEEEEEEEEEEEEEST" << std::endl;
 
-	myTree.Erase(20);
-	myTree.Erase(17);
-	myTree.Erase(25);
-
-
-
-	std::cout << myTree.Find(15) <<"\n";
-	std::cout << myTree.Find(9) << "\n";
-	std::cout << myTree.Find(8) << "\n";
-	std::cout << myTree.Find(10) << "\n";
-	std::cout << myTree.Find(20) << "\n";
-	std::cout << myTree.Find(25) << "\n";
-	std::cout << myTree.Find(17) << "\n";
-	std::cout << myTree.Find(16) << "\n";
-	std::cout << myTree.Find(23) << "\n";
-
-	
 	myTree.Print();
-	
-
-
+	myTree.Erase(7);
+	std::cout << "TEEEEEEEEEEEEEEEEST" << std::endl;
+	myTree.Print();
 } 
 
 //рефактор файнда
